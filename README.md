@@ -279,17 +279,4 @@ We welcome contributions to BiteBuddy! Please follow these steps:
 
 ---
 
-## **License**
 
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## **Contact**
-
-- **GitHub Repository**: [AAYUSH412/Full-Stack-Online-Food-Ordering-System](https://github.com/AAYUSH412/Full-Stack-Online-Food-Ordering-System)
-- **Developer**: Aayush Vaghela
-- **Email**: [aayushvaghela12@gmail.com](mailto:aayushvaghela12@gmail.com)
----
-
-**Thank you for choosing BiteBuddy! Your satisfaction is our priority.**
