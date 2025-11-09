@@ -107,15 +107,37 @@ const dynamicOrigins = dynamicOriginsString ? dynamicOriginsString.split(',') : 
 const allowedOrigins = [...hardcodedOrigins, ...dynamicOrigins];
 
 // Allow CORS from specific origins
-app.use(cors({
-    // Use the combined list of origins
-    origin: allowedOrigins,
+// app.use(cors({
+//     // Use the combined list of origins
+//     origin: allowedOrigins,
     
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], 
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    exposedHeaders: ['Set-Cookie']
-}));
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'], 
+//     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+//     exposedHeaders: ['Set-Cookie']
+// }));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        'http://localhost:5173',
+        'https://foodorderingfrontend-4dyf.onrender.com', // ✅ your frontend Render URL
+      ];
+
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true, // ✅ required for cookies
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  })
+);
+
 
 // --- END: MODIFIED CORS LOGIC ---
 
