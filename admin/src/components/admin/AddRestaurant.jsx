@@ -1,6 +1,6 @@
 // src/components/admin/AddRestaurant.jsx
 
-import { useState } from 'react';
+import React, { useState } from 'react'
 import { Upload, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 
