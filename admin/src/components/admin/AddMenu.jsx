@@ -608,7 +608,7 @@ const AddMenu = () => {
       );
       const data = await response.json();
       if (data.success) {
-        setMenuItems(data.data);
+        setMenuItems(data.data.items);
       } else {
         toast.error(data.message || 'Failed to fetch menu items');
       }
