@@ -38,3 +38,4 @@ const ManageMenus = () => {
       </div>
     );
   };
+export default ManageMenus;
