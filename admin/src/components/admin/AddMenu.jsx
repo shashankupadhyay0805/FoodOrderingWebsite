@@ -249,13 +249,13 @@ const AddMenu = () => {
   const [editingItem, setEditingItem] = useState(null); // Will store the ID of item being edited
 
   // --- NEW: Function to fetch all menu items for this restaurant ---
-  const fetchMenuItems = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/menus/restaurant/${restaurantId}`);
-      const data = await response.json();
-      if (data.success) {
-        setMenuItems(data.data);
-      } else {
+ const fetchMenuItems = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/menus/restaurant/${restaurantId}`);
+        const data = await response.json();
+        if (data.success) {
+          setMenuItems(data.data.items); // <-- THIS IS THE FIX
+        } else {
         toast.error(data.message || 'Failed to fetch menu items');
       }
     } catch (error) {
