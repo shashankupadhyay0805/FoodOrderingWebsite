@@ -94,6 +94,7 @@ const hardcodedOrigins = [
     "http://localhost:5173",
     "http://localhost:4000",
     "http://localhost:5174", 
+    "https://foodorderingfrontend-4dyf.onrender.com",
 ];
 
 // 2. Get the environment variable string (e.g., "url1,url2")
