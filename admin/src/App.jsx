@@ -31,22 +31,23 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// --- START: CORRECTED IMPORTS ---
-
-// These are in 'src/components/admin/'
+// --- START: IMPORTS ---
 import AddRestaurant from "./components/admin/AddRestaurant";
 import AddMenu from "./components/admin/AddMenu";
 import ManageOrder from "./components/admin/ManageOrder";
 import RestaurantList from "./components/admin/RestaurantList";
 
-// These are in 'src/components/adminpage/'
 import AdminLogin from "./components/adminpage/AdminLogin.jsx";
 import AdminProtectedRoute from "./components/adminpage/AdminProtectedRoute.jsx";
+import ManageMenus from "./components/adminpage/ManageMenus.jsx"; 
 
-// This is directly in 'src/components/'
+// 1. Import your new ManageUsers component
+// (Make sure this file exists at this path)
+import ManageUsers from "./components/adminpage/ManageUsers.jsx"; 
+
+// Import your layout
 import AdminLayout from "./components/AdminLayout.jsx"; 
-
-// --- END: CORRECTED IMPORTS ---
+// --- END: IMPORTS ---
 
 
 const App = () => {
@@ -69,9 +70,14 @@ const App = () => {
           <Route index element={<RestaurantList />} />
           <Route path="restaurants" element={<RestaurantList />} />
           <Route path="add-restaurant" element={<AddRestaurant />} />
-    _     <Route path="add-menu/:restaurantId" element={<AddMenu />} />
+          <Route path="add-menu/:restaurantId" element={<AddMenu />} />
           <Route path="manage-orders" element={<ManageOrder />} />
-See     </Route>
+M       <Route path="menus" element={<ManageMenus />} />
+          
+          {/* 2. Add the new route for Users */}
+          <Route path="users" element={<ManageUsers />} />
+
+        </Route>
 
         {/* A default route to send users to login */}
         <Route path="/" element={<AdminLogin />} />
