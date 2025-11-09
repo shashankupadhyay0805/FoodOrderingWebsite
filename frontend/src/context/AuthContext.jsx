@@ -49,27 +49,22 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Check existing token on mount
+  // ✅ Check user auth on mount using cookies
   const checkAuth = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        credentials: 'include', // 🔥 include cookies in request
       });
+
       const data = await response.json();
-      if (data.success) setUser(data.user);
-      else localStorage.removeItem('token');
+      if (data.success) {
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
     } catch (error) {
       console.error('Auth check failed:', error);
-      localStorage.removeItem('token');
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -86,10 +81,11 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
+        credentials: 'include', // 🔥 important for setting cookie
       });
+
       const data = await response.json();
       if (data.success) {
-        localStorage.setItem('token', data.token);
         setUser(data.user);
         return { success: true };
       }
@@ -106,10 +102,11 @@ export const AuthProvider = ({ children }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
+        credentials: 'include', // 🔥 so cookie is saved immediately
       });
+
       const data = await response.json();
       if (data.success) {
-        localStorage.setItem('token', data.token);
         setUser(data.user);
         return { success: true };
       }
@@ -119,9 +116,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
+  // ✅ Logout
+  const logout = async () => {
+    try {
+      await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signout`, {
+        method: 'POST',
+        credentials: 'include', // 🔥 removes cookie
+      });
+    } catch (err) {
+      console.error('Logout failed:', err);
+    } finally {
+      setUser(null);
+    }
   };
 
   return (
