@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon --watch . --exec node server.js"
+    "server": "nodemon --watch . --exec node --experimental-modules server.js"
   },
   "keywords": [],
   "author": "",
