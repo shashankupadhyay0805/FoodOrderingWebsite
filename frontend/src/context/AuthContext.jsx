@@ -49,31 +49,27 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Check existing token on mount
   const checkAuth = async () => {
-    try {
-      // ✅ Get token from localStorage (you should store it there after login)
-      const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
+    try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
-        method: 'GET',
-        credentials: 'include',
         headers: {
-          'Accept': 'application/json',
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}), // ✅ attach token if exists
+          Authorization: `Bearer ${token}`,
         },
       });
-
       const data = await response.json();
-
-      if (data.success) {
-        setUser(data.user);
-      } else {
-        setUser(null);
-      }
+      if (data.success) setUser(data.user);
+      else localStorage.removeItem('token');
     } catch (error) {
       console.error('Auth check failed:', error);
-      setUser(null);
+      localStorage.removeItem('token');
     } finally {
       setLoading(false);
     }
@@ -83,8 +79,53 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  // ✅ Login
+  const login = async (email, password) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem('token', data.token);
+        setUser(data.user);
+        return { success: true };
+      }
+      return { success: false, message: data.message };
+    } catch {
+      return { success: false, message: 'Login failed' };
+    }
+  };
+
+  // ✅ Signup
+  const signup = async (userData) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem('token', data.token);
+        setUser(data.user);
+        return { success: true };
+      }
+      return { success: false, message: data.message };
+    } catch {
+      return { success: false, message: 'Signup failed' };
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, checkAuth }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
