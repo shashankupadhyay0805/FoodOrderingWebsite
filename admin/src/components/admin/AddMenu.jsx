@@ -18,24 +18,28 @@ const AddMenu = () => {
   const [restaurant, setRestaurant] = useState(null);
   const { restaurantId } = useParams();
 
-  useEffect(() => {
-    // Fetch restaurant details
-    const fetchRestaurant = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/restaurants/list/${restaurantId}`);
+useEffect(() => {
+    // Fetch restaurant details
+    const fetchRestaurant = async () => {
+      try {
+        // --- FIX: Removed "/list" from this URL ---
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/restaurants/${restaurantId}`);
+        
         const data = await response.json();
-        if (data.success) {
-          setRestaurant(data.data);
-        }
-      } catch (error) {
-        toast.error('Failed to fetch restaurant details');
-      }
-    };
+        if (data.success) {
+          setRestaurant(data.data);
+        }
+      } catch (error) {
+        toast.error('Failed to fetch restaurant details');
+      }
+    };
 
+    // Don't forget to call the function!
     if (restaurantId) {
-      fetchRestaurant();
+        fetchRestaurant();
     }
-  }, [restaurantId]);
+
+}, [restaurantId]); // Add restaurantId as a dependency
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
