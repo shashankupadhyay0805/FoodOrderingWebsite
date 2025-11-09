@@ -580,7 +580,6 @@
 // export default AddMenu;
 
 
-
 import { useState, useEffect } from 'react';
 import { Upload, X, Edit, Trash2, PlusCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -604,10 +603,12 @@ const AddMenu = () => {
 
   const fetchMenuItems = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/menus/restaurant/${restaurantId}`);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/menus/restaurant/${restaurantId}`
+      );
       const data = await response.json();
       if (data.success) {
-        setMenuItems(data.data.items);
+        setMenuItems(data.data);
       } else {
         toast.error(data.message || 'Failed to fetch menu items');
       }
@@ -619,7 +620,9 @@ const AddMenu = () => {
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/restaurants/${restaurantId}`);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/restaurants/${restaurantId}`
+        );
         const data = await response.json();
         if (data.success) {
           setRestaurant(data.data);
@@ -637,7 +640,7 @@ const AddMenu = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
@@ -646,7 +649,7 @@ const AddMenu = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData(prev => ({ ...prev, image: file }));
+      setFormData((prev) => ({ ...prev, image: file }));
       setImagePreview(URL.createObjectURL(file));
     }
   };
@@ -687,7 +690,6 @@ const AddMenu = () => {
         method: method,
         body: formDataToSend
       });
-
       const data = await response.json();
 
       if (data.success) {
@@ -722,9 +724,12 @@ const AddMenu = () => {
       return;
     }
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/menus/${menuItemId}`, {
-        method: 'DELETE'
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/menus/${menuItemId}`,
+        {
+          method: 'DELETE'
+        }
+      );
       const data = await response.json();
       if (data.success) {
         toast.success('Menu item deleted!');
@@ -742,6 +747,7 @@ const AddMenu = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
+        {/* Form Section */}
         <div className="mb-12">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">
@@ -752,9 +758,15 @@ const AddMenu = () => {
             )}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6 bg-white p-6 rounded-lg shadow"
+          >
+            {/* Item Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Item Name</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Item Name
+              </label>
               <input
                 type="text"
                 name="name"
@@ -765,8 +777,11 @@ const AddMenu = () => {
               />
             </div>
 
+            {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Description</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
               <textarea
                 name="description"
                 value={formData.description}
@@ -777,8 +792,11 @@ const AddMenu = () => {
               />
             </div>
 
+            {/* Price */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Price (₹)</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Price (₹)
+              </label>
               <input
                 type="number"
                 name="price"
@@ -790,6 +808,7 @@ const AddMenu = () => {
               />
             </div>
 
+            {/* Is Vegetarian */}
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -798,11 +817,16 @@ const AddMenu = () => {
                 onChange={handleChange}
                 className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
               />
-              <label className="ml-2 block text-sm text-gray-700">Vegetarian Item</label>
+              <label className="ml-2 block text-sm text-gray-700">
+                Vegetarian Item
+              </label>
             </div>
 
+            {/* Image Upload */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Item Image</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Item Image
+              </label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                 <div className="space-y-1 text-center">
                   <Upload className="mx-auto h-12 w-12 text-gray-400" />
@@ -821,15 +845,18 @@ const AddMenu = () => {
                   <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
                 </div>
               </div>
-
               {imagePreview && (
                 <div className="mt-2 relative w-32">
-                  <img src={imagePreview} alt="Preview" className="h-32 w-32 object-cover rounded" />
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="h-32 w-32 object-cover rounded"
+                  />
                   <button
                     type="button"
                     onClick={() => {
                       setImagePreview(null);
-                      setFormData(prev => ({ ...prev, image: null }));
+                      setFormData((prev) => ({ ...prev, image: null }));
                     }}
                     className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
                   >
@@ -839,14 +866,23 @@ const AddMenu = () => {
               )}
             </div>
 
+            {/* Submit Button */}
             <div className="flex gap-4">
               <button
                 type="submit"
                 disabled={loading}
-                className={`flex-1 flex justify-center items-center gap-2 bg-green-600 text-white py-2 px-4 rounded-md font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`flex-1 flex justify-center items-center gap-2 bg-green-600 text-white py-2 px-4 rounded-md font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 ${
+                  loading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               >
                 <PlusCircle size={20} />
-                {loading ? (isEditing ? 'Updating...' : 'Adding...') : (isEditing ? 'Update Item' : 'Add Item')}
+                {loading
+                  ? isEditing
+                    ? 'Updating...'
+                    : 'Adding...'
+                  : isEditing
+                  ? 'Update Item'
+                  : 'Add Item'}
               </button>
               {isEditing && (
                 <button
@@ -861,17 +897,28 @@ const AddMenu = () => {
           </form>
         </div>
 
+        {/* Existing Menu Items */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Existing Menu Items</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            Existing Menu Items
+          </h2>
           {menuItems.length === 0 ? (
-            <p className="text-gray-500">No menu items found for this restaurant.</p>
+            <p className="text-gray-500">
+              No menu items found for this restaurant.
+            </p>
           ) : (
             <div className="space-y-4">
               {menuItems.map((item) => (
-                <div key={item._id} className="bg-white p-4 rounded-lg shadow flex items-center justify-between">
+                <div
+                  key={item._id}
+                  className="bg-white p-4 rounded-lg shadow flex items-center justify-between"
+                >
                   <div className="flex items-center gap-4">
                     <img
-                      src={item.image || 'https://placehold.co/100x100/green/white?text=No+Image'}
+                      src={
+                        item.image ||
+                        'https://placehold.co/100x100/green/white?text=No+Image'
+                      }
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-md"
                     />
@@ -879,7 +926,11 @@ const AddMenu = () => {
                       <h3 className="text-lg font-semibold">{item.name}</h3>
                       <p className="text-gray-600">₹{item.price}</p>
                       <span
-                        className={`px-2 py-0.5 rounded-full text-xs ${item.isVeg ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
+                        className={`px-2 py-0.5 rounded-full text-xs ${
+                          item.isVeg
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
                       >
                         {item.isVeg ? 'Veg' : 'Non-Veg'}
                       </span>
@@ -913,4 +964,5 @@ const AddMenu = () => {
 };
 
 export default AddMenu;
+
 
