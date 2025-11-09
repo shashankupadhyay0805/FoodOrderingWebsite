@@ -31,33 +31,32 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// 1. Import all your components
+// --- START: CORRECTED IMPORTS ---
+
+// These are in 'src/components/admin/'
 import AddRestaurant from "./components/admin/AddRestaurant";
 import AddMenu from "./components/admin/AddMenu";
 import ManageOrder from "./components/admin/ManageOrder";
 import RestaurantList from "./components/admin/RestaurantList";
 
-// 2. Import your LOGIN and LAYOUT components
-// (You might need to fix these paths if they are wrong)
-import AdminLogin from "./components/adminPage/AdminLogin";
-import AdminProtectedRoute from "./components/adminPage/AdminProtectedRoute";
-import AdminLayout from "./components/AdminLayout"; // This is your sidebar layout
+// These are in 'src/components/adminpage/'
+import AdminLogin from "./components/adminpage/AdminLogin.jsx";
+import AdminProtectedRoute from "./components/adminpage/AdminProtectedRoute.jsx";
+
+// This is directly in 'src/components/'
+import AdminLayout from "./components/AdminLayout.jsx"; 
+
+// --- END: CORRECTED IMPORTS ---
+
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ROUTE 1: THE LOGIN PAGE 
-          This is a public page. 
-          Note: We are NOT rendering the <Navbar /> here.
-        */}
+        {/* ROUTE 1: THE LOGIN PAGE */}
         <Route path="/admin-login" element={<AdminLogin />} />
 
-        {/* ROUTE 2: YOUR PROTECTED ADMIN PAGES
-          This wrapper does two things:
-          1. <AdminProtectedRoute> checks if the user is logged in.
-          2. <AdminLayout> shows the sidebar and renders all child routes.
-        */}
+        {/* ROUTE 2: YOUR PROTECTED ADMIN PAGES */}
         <Route
           path="/admin"
           element={
@@ -66,22 +65,16 @@ const App = () => {
             </AdminProtectedRoute>
           }
         >
-          {/* These are the CHILD ROUTES. 
-            They will be rendered inside <AdminLayout>'s <Outlet />.
-            We also add a default "index" route.
-          */}
-          <Route index element={<RestaurantList />} /> {/* Default admin page */}
+          {/* Child routes rendered inside AdminLayout */}
+          <Route index element={<RestaurantList />} />
           <Route path="restaurants" element={<RestaurantList />} />
           <Route path="add-restaurant" element={<AddRestaurant />} />
-          <Route path="add-menu/:restaurantId" element={<AddMenu />} />
+    _     <Route path="add-menu/:restaurantId" element={<AddMenu />} />
           <Route path="manage-orders" element={<ManageOrder />} />
-          {/* Add routes for "Menus" and "Users" from your layout here */}
-          
-        </Route>
+See     </Route>
 
-        {/* Optional: A default route to send users to login */}
-        <Route path="/" element={<AdminLogin />} />
-
+        {/* A default route to send users to login */}
+        <Route path="/" element={<AdminLogin />} />
       </Routes>
       <ToastContainer />
     </BrowserRouter>
@@ -89,7 +82,6 @@ const App = () => {
 };
 
 export default App;
-
 
 
 
