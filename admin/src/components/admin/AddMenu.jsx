@@ -1,6 +1,6 @@
 // src/components/admin/AddMenu.jsx
-
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react'
+import { useEffect } from 'react';
 import { Upload, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
