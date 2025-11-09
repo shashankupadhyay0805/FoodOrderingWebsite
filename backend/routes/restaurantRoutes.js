@@ -19,24 +19,28 @@
 // export default router;
 import express from 'express';
 import {
-    createRestaurant,
-    getRestaurants,
-    getRestaurantById,
-    updateRestaurant,
-    deleteRestaurant
+  createRestaurant,
+  getRestaurants,
+  getRestaurantById,
+  updateRestaurant,
+  deleteRestaurant
 } from '../controllers/restaurantController.js';
 
 const router = express.Router();
 
-// The BASE URL for this router is /api/restaurants
-// Fix 1: Use the root route ('/') for creation, matching the frontend's expected POST /api/restaurants
-router.post('/', createRestaurant);
+// The base URL for this router is /api/restaurants (defined in server.js)
 
-// Fix 2: Simplify GET routes (assuming no other list route is needed)
-router.get('/', getRestaurants); // GET /api/restaurants/
-router.get('/:id', getRestaurantById); // GET /api/restaurants/:id
+// 1. Specific route for GET /api/restaurants/list
+// This MUST be defined BEFORE the dynamic '/:id' route.
+// This route now matches your frontend's API call.
+router.get('/list', getRestaurants);
 
-// CRUD Routes for Updates/Deletes
+// 2. Dynamic route for getting one restaurant by ID
+// This handles GET /api/restaurants/:id (e.g., /api/restaurants/60c72b...)
+router.get('/:id', getRestaurantById);
+
+// 3. Other CRUD routes
+router.post('/', createRestaurant); // POST /api/restaurants
 router.put('/:id', updateRestaurant); // PUT /api/restaurants/:id
 router.delete('/:id', deleteRestaurant); // DELETE /api/restaurants/:id
 
