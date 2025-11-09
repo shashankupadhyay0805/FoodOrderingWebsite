@@ -18,7 +18,9 @@ const RestaurantDetail = () => {
   useEffect(() => {
     const fetchRestaurantAndMenu = async () => {
       try {
-        const restaurantRes = await fetch(`${import.meta.env.VITE_API_URL}/api/restaurants/list/${id}`);
+        // const restaurantRes = await fetch(`${import.meta.env.VITE_API_URL}/api/restaurants/list/${id}`);
+        const restaurantRes = await fetch(`${import.meta.env.VITE_API_URL}/api/restaurants/${id}`);
+
         const restaurantData = await restaurantRes.json();
   
         if (restaurantData.success) {
