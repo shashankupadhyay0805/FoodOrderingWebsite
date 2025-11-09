@@ -63,3 +63,4 @@ const ManageRestaurants = () => {
     </div>
   );
 };
+export default ManageRestaurants;
